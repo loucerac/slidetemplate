@@ -1,0 +1,88 @@
+\ProvidesPackage{beamerthemecustommoloch}[2025/10/23 Custom tweaks for the Moloch beamer theme]
+
+\DeclareOptionBeamer{numbering}{\PassOptionsToPackage{numbering=#1}{beamerthememoloch}}
+\DeclareOptionBeamer{progressbar}{\PassOptionsToPackage{progressbar=#1}{beamerthememoloch}}
+\DeclareOptionBeamer*{\PassOptionsToPackage{\CurrentOption}{beamerthememoloch}}
+\ProcessOptionsBeamer
+
+\RequirePackage{beamerthememoloch}
+\RequirePackage{fontawesome5}
+
+\definecolor{SoftRed}{HTML}{E57373}
+\setbeamercolor{frametitle}{fg=white,bg=SoftRed}
+\setbeamerfont{section in head/foot}{size=\footnotesize,series=\bfseries}
+
+\newcommand*{\custommolochContact}{clou@us.es}
+\newcommand*{\custommolochLogoHeight}{10ex}
+\newcommand*{\custommolochInsertLogo}{%
+  \IfFileExists{us-logo.pdf}{\includegraphics[height=\custommolochLogoHeight]{fig/us-logo.pdf}}{%
+    \IfFileExists{us-logo.png}{\includegraphics[height=\custommolochLogoHeight]{fig/us-logo.png}}{}}}
+
+\makeatletter
+\setlength{\moloch@frametitle@padding}{1.2ex}
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip%
+  \begin{beamercolorbox}[
+    wd=\paperwidth,
+    leftskip=1.6ex,
+    rightskip=\the\glueexpr 1.6ex plus 1fil\relax,
+  ]{frametitle}%
+    \usebeamerfont{frametitle}%
+    \moloch@frametitlestrut@start%
+    \moloch@frametitleformat{%
+      \insertframetitle%
+      \ifx\insertsectionhead\@empty%
+      \else%
+        \hfill%
+        {\usebeamerfont{section in head/foot}%
+         \usebeamercolor[fg]{section in head/foot}%
+         \rule[-\moloch@frametitle@padding]{0.6pt}{\dimexpr\moloch@frametitle@padding+\ht\strutbox\relax}%
+         \hspace{0.75ex}%
+         \insertsectionhead}%
+      \fi%
+    }%
+    {%
+      \ifx\insertframesubtitle\@empty%
+      \else%
+        {\par%
+         \usebeamerfont{framesubtitle}%
+         \vspace{-0.8ex}%
+         \usebeamercolor[fg]{framesubtitle}%
+         \insertframesubtitle}%
+      \fi%
+    }%
+    \moloch@frametitlestrut@end%
+  \end{beamercolorbox}%
+}
+\makeatother
+
+\setbeamerfont{footline}{size=\scriptsize}
+\setbeamertemplate{footline}{%
+  \begin{beamercolorbox}[wd=\paperwidth,leftskip=1.6ex,rightskip=1.6ex,ht=2.6ex,dp=1.0ex]{footline}%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hfill%
+    \usebeamertemplate*{page number in head/foot}%
+    \hfill%
+  \end{beamercolorbox}%
+}
+
+\setbeamertemplate{author}{%
+  \raggedright%
+  \insertauthor%
+  \enspace{\scriptsize\faIcon{envelope}\,\href{mailto:\custommolochContact}{\custommolochContact}}%
+  \par%
+  \vspace*{0.5em}%
+}
+
+\makeatletter
+\setbeamertemplate{title graphic}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \ifx\inserttitlegraphic\@empty\else
+      \node[anchor=north west,xshift=1.6ex,yshift=-1.6ex] at (current page.north west){\inserttitlegraphic};
+    \fi
+  \end{tikzpicture}%
+}
+\makeatother
+
+\csname titlegraphic\endcsname{\custommolochInsertLogo}

@@ -1,0 +1,40 @@
+# LaTeX intermediate files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.nav
+*.nlo
+*.out
+*.snm
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.vrb
+*.xdv
+*.xout
+*.run.xml
+
+# Generated PDFs and PostScript
+*.pdf
+*.ps
+*.dvi
+
+# Backup files
+*~
+*.bak
+*.sav
+*.backup
+
+# Editor swap/lock files
+.#*
+*.swp
+*.swo
