@@ -15,8 +15,12 @@
 \newcommand*{\custommolochContact}{clou@us.es}
 \newcommand*{\custommolochLogoHeight}{10ex}
 \newcommand*{\custommolochInsertLogo}{%
-  \IfFileExists{us-logo.pdf}{\includegraphics[height=\custommolochLogoHeight]{fig/us-logo.pdf}}{%
-    \IfFileExists{us-logo.png}{\includegraphics[height=\custommolochLogoHeight]{fig/us-logo.png}}{}}}
+  \IfFileExists{fig/us-logo.pdf}{\includegraphics[height=\custommolochLogoHeight]{fig/us-logo.pdf}}{% 
+    \IfFileExists{fig/us-logo.png}{\includegraphics[height=\custommolochLogoHeight]{fig/us-logo.png}}{}}}
+\newcommand*{\custommolochEtsiiLogoHeight}{4ex}
+\newcommand*{\custommolochInsertEtsiiLogo}{%
+  \IfFileExists{fig/logo-ETSII-Color.pdf}{\includegraphics[height=\custommolochEtsiiLogoHeight]{fig/logo-ETSII-Color.pdf}}{% 
+    \IfFileExists{fig/logo-ETSII-Color.png}{\includegraphics[height=\custommolochEtsiiLogoHeight]{fig/logo-ETSII-Color.png}}{}}}
 
 \makeatletter
 \setlength{\moloch@frametitle@padding}{1.2ex}
@@ -81,6 +85,12 @@
     \ifx\inserttitlegraphic\@empty\else
       \node[anchor=north west,xshift=1.6ex,yshift=-1.6ex] at (current page.north west){\inserttitlegraphic};
     \fi
+    \begingroup
+      \setbox\@tempboxa=\hbox{\custommolochInsertEtsiiLogo}%
+      \ifdim\wd\@tempboxa>0pt
+        \node[anchor=north east,xshift=-1.6ex,yshift=-1.6ex] at (current page.north east){\box\@tempboxa};
+      \fi
+    \endgroup
   \end{tikzpicture}%
 }
 \makeatother
