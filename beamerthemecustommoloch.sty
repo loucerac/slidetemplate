@@ -16,14 +16,18 @@
 \setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
 
 \newcommand*{\custommolochContact}{clou@us.es}
-\newcommand*{\custommolochLogoHeight}{8ex}
+% ETSII (8722x1162, ratio 7.5:1): width-limited at 0.30\paperwidth → short but fills slot
+% US   (671x582,   ratio 1.15:1): height-limited at 0.13\paperheight
+% IBIS (165x73,    ratio 2.26:1): height-limited at 0.13\paperheight
 \newcommand*{\custommolochInsertLogo}{%
-  \IfFileExists{fig/us-logo.pdf}{\includegraphics[height=\custommolochLogoHeight]{fig/us-logo.pdf}}{% 
-    \IfFileExists{fig/us-logo.png}{\includegraphics[height=\custommolochLogoHeight]{fig/us-logo.png}}{}}}
-\newcommand*{\custommolochEtsiiLogoHeight}{4ex}
+  \IfFileExists{figs/logos/us-logo.pdf}{\includegraphics[height=0.10\paperheight,width=0.25\paperwidth,keepaspectratio]{figs/logos/us-logo.pdf}}{%
+    \IfFileExists{figs/logos/us-logo.png}{\includegraphics[height=0.10\paperheight,width=0.25\paperwidth,keepaspectratio]{figs/logos/us-logo.png}}{}}}
 \newcommand*{\custommolochInsertEtsiiLogo}{%
-  \IfFileExists{fig/logo-ETSII-Color.pdf}{\includegraphics[height=\custommolochEtsiiLogoHeight]{fig/logo-ETSII-Color.pdf}}{% 
-    \IfFileExists{fig/logo-ETSII-Color.png}{\includegraphics[height=\custommolochEtsiiLogoHeight]{fig/logo-ETSII-Color.png}}{}}}
+  \IfFileExists{figs/logos/logo-ETSII-Color.pdf}{\includegraphics[height=0.10\paperheight,width=0.25\paperwidth,keepaspectratio]{figs/logos/logo-ETSII-Color.pdf}}{%
+    \IfFileExists{figs/logos/logo-ETSII-Color.png}{\includegraphics[height=0.10\paperheight,width=0.25\paperwidth,keepaspectratio]{figs/logos/logo-ETSII-Color.png}}{}}}
+\newcommand*{\custommolochInsertIbisLogo}{%
+  \IfFileExists{figs/logos/ibis-logo.pdf}{\includegraphics[height=0.10\paperheight,width=0.25\paperwidth,keepaspectratio]{figs/logos/ibis-logo.pdf}}{%
+    \IfFileExists{figs/logos/ibis-logo.png}{\includegraphics[height=0.10\paperheight,width=0.25\paperwidth,keepaspectratio]{figs/logos/ibis-logo.png}}{}}}
 
 \makeatletter
 \setlength{\moloch@frametitle@padding}{1.2ex}
@@ -118,16 +122,41 @@
 \makeatletter
 \setbeamertemplate{title graphic}{%
   \begin{tikzpicture}[remember picture,overlay]
-    \ifx\inserttitlegraphic\@empty\else
-      \node[anchor=north west,xshift=1.6ex,yshift=-1.6ex] at (current page.north west){\inserttitlegraphic};
-    \fi
-    \begingroup
-      \setbox\@tempboxa=\hbox{\custommolochInsertEtsiiLogo}%
-      \ifdim\wd\@tempboxa>0pt
-        \node[anchor=north east,xshift=-1.6ex,yshift=-1.6ex] at (current page.north east){\box\@tempboxa};
-      \fi
-    \endgroup
+    % thin separator above the logo strip
+    \draw[gray!40, line width=0.4pt]
+      ([xshift=1.6ex, yshift=0.22\paperheight]current page.south west) --
+      ([xshift=-1.6ex,yshift=0.22\paperheight]current page.south east);
+    % ETSII — left third, vertically centered in logo strip
+    \node[anchor=center,xshift=0.17\paperwidth,yshift=0.08\paperheight] at (current page.south west){%
+      \custommolochInsertEtsiiLogo};
+    % US — center third, vertically centered in logo strip
+    \node[anchor=center,yshift=0.08\paperheight] at (current page.south){%
+      \custommolochInsertLogo};
+    % IBIS — right third, vertically centered in logo strip
+    \node[anchor=center,xshift=-0.17\paperwidth,yshift=0.08\paperheight] at (current page.south east){%
+      \custommolochInsertIbisLogo};
   \end{tikzpicture}%
+}
+\makeatother
+
+% Trigger the title graphic template (TikZ overlay needs non-empty titlegraphic)
+\csname titlegraphic\endcsname{\phantom{x}}
+
+% Override title page: replace the bottom \vfill with a fixed space so the date
+% doesn't drift into the logo strip drawn by the title graphic overlay.
+\makeatletter
+\setbeamertemplate{title page}{%
+  \begin{minipage}[b][\paperheight]{\textwidth}
+    \ifx\inserttitlegraphic\@empty\else\usebeamertemplate*{title graphic}\fi
+    \vfill%
+    \ifx\inserttitle\@empty\else\usebeamertemplate*{title}\fi
+    \ifx\insertsubtitle\@empty\else\usebeamertemplate*{subtitle}\fi
+    \usebeamertemplate*{title separator}%
+    \ifx\beamer@shortauthor\@empty\else\usebeamertemplate*{author}\fi
+    \ifx\insertinstitute\@empty\else\usebeamertemplate*{institute}\fi
+    \ifx\insertdate\@empty\else\usebeamertemplate*{date}\fi
+    \vspace{0.25\paperheight}%
+  \end{minipage}%
 }
 \makeatother
 
@@ -167,4 +196,3 @@
 \setbeamertemplate{section page}[progressbar]
 \makeatother
 
-\csname titlegraphic\endcsname{\custommolochInsertLogo}
