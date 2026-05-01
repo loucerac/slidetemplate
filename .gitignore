@@ -39,3 +39,5 @@
 *.swp
 *.swo
 old_slides/
+*.json
+*.md
